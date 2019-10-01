@@ -25,14 +25,15 @@ class RegisterActivity : AppCompatActivity(){
             val pwCheck = register_pwCheck.text.toString()
 
             signUp(email,pw,pwCheck)
-        }
+        }//버튼 누를때의 동작
     }
     fun signUp(email: String, pw: String, pwCheck: String) {
-        var database: UserDatabase = UserDatabase.getInstance(this)
+        val database: UserDatabase = UserDatabase.getInstance(this)
 
-        var userDao: UserDao=database.userDao
-        val userList = ArrayList<User>()
+        val userDao: UserDao=database.userDao
+        val userList = ArrayList<User>()  //정보를 저장할 리스트
         val signUpThread = Thread { userList.addAll(userDao.findUser(email)) }
+        //Thread 만들기, addAll로 전체 정보중에서 UserDao에 있는 finduser 쿼리문을 통해 현재 입력한 email과 같은 정보가 있다면 userList에 넣음
         signUpThread.start()
 
         try {
@@ -53,8 +54,8 @@ class RegisterActivity : AppCompatActivity(){
         }
 
         val user = User(email, pw)
-        Thread { database.userDao.insert(user) }.start()
-        val intent = Intent(this, LoginActivity::class.java)
+        Thread { database.userDao.insert(user) }.start() //email, pw 정보 저장
+        val intent = Intent(this, LoginActivity::class.java) //로그인 액티비티로 돌아가기
         this.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         this.finish()
 

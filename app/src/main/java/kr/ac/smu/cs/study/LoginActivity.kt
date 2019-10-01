@@ -34,10 +34,11 @@ class LoginActivity : AppCompatActivity() {
     }
     fun Login(email: String, pw: String) {
 
-        var database: UserDatabase = UserDatabase.getInstance(this)
-        var userDao: UserDao=database.userDao
+        val database: UserDatabase = UserDatabase.getInstance(this)
+        val userDao: UserDao=database.userDao
         val userList = ArrayList<User>()
         val loginThread = Thread { userList.addAll(userDao.userLogin(email,pw)) }
+        //입력한 email,pw의 정보를 가진 게 있는지 쿼리를 날리고 있다면 userList에 저장
         loginThread.start()
 
         try {
