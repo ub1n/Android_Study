@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
             val email = login_email.text.toString()
             val pw = login_pw.text.toString()
 
-            //Login(email, pw)
+
             if (Login(email,pw)) {
 
                 val intent = Intent(this, MainActivity::class.java)
@@ -91,13 +91,7 @@ class LoginActivity : AppCompatActivity() {
             false
         } else userList[0].email == email
 
-        /*if (userList.size == 0) {
-            Toast.makeText(this, "일치하는 계정이 없습니다", Toast.LENGTH_LONG).show()
-        } else {
-            val intent = Intent(this, MainActivity::class.java)
-            this.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            this.finish()
-        }*/
+
 
     }
 
