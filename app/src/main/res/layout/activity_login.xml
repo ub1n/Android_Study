@@ -24,22 +24,53 @@
         android:hint="Email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="20dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+         />
+
+    <CheckBox
+        android:id="@+id/login_checkId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="email 저장" />
 
     <EditText
         android:id="@+id/login_pw"
         android:hint="password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
         android:inputType="textPassword"/>
+
+    <CheckBox
+        android:id="@+id/login_checkPw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="비밀번호저장" />
+
+    <CheckBox
+        android:id="@+id/login_checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="자동로그인" />
 
     <TextView
         android:id="@+id/login_login_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="로그인"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"

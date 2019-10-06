@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity(){
         }//버튼 누를때의 동작
     }
     fun signUp(email: String, pw: String, pwCheck: String) {
-        val database: UserDatabase = UserDatabase.getInstance(this)
+        val database: UserDatabase = UserDatabase.getInstance(this) //application context
 
         val userDao: UserDao=database.userDao
         val userList = ArrayList<User>()  //정보를 저장할 리스트
