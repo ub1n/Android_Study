@@ -34,13 +34,7 @@ class RegisterActivity : AppCompatActivity(){
         val userList = ArrayList<User>()  //정보를 저장할 리스트
         val signUpThread = Thread { userList.addAll(userDao.findUser(email)) }
         //Thread 만들기, addAll로 전체 정보중에서 UserDao에 있는 finduser 쿼리문을 통해 현재 입력한 email과 같은 정보가 있다면 userList에 넣음
-        signUpThread.start()
 
-        try {
-            signUpThread.join()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
 
         if (userList.size != 0) {
 
