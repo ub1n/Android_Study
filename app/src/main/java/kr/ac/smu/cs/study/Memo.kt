@@ -1,9 +1,7 @@
 package kr.ac.smu.cs.study
 
 import android.graphics.Bitmap
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity
 class Memo() { //저장할 정보, primaryKey가 필요
@@ -16,8 +14,11 @@ class Memo() { //저장할 정보, primaryKey가 필요
     var day:Int?=null
     var hour:Int?=null
     var minute:Int?=null
-    @Ignore
-    var image: Bitmap?=null
+    var image: String?=null
+        //@Embedded
+
+
+
     //var image:ByteArray?=null
 
 }

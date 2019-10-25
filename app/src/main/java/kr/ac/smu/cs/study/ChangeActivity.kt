@@ -29,9 +29,11 @@ class ChangeActivity : AppCompatActivity() {
         val hour=intent.getIntExtra("hour",0)
         val minute=intent.getIntExtra("minute",0)
         val id=intent.getIntExtra("id",0)
-        val byteArray=intent.getByteArrayExtra("image")
+        val byteString=intent.getStringExtra("image")
+        val byteArray=Base64.getDecoder().decode(byteString)
         val picture= BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)
-        memo.image=picture
+        //memo.image=picture
+        memo.image=byteString
         memo.title=title
         memo.content=content
         memo.year=year
@@ -106,14 +108,16 @@ class ChangeActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==123){
-            var bmp= data?.extras?.get("data") as Bitmap
+            /*var bmp= data?.extras?.get("data") as Bitmap
             c_imageView.setImageBitmap(bmp)
-            memo.image=bmp
-            /*var bmp=data?.extras?.get("data") as Bitmap
+            memo.image=bmp*/
+            var bmp=data?.extras?.get("data") as Bitmap
             var stream= ByteArrayOutputStream()
             bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
             var byteArray=stream.toByteArray()
-            memo.image=byteArray*/
+            var w=Base64.getEncoder().encodeToString(byteArray)
+            memo.image=w
+            c_imageView.setImageBitmap(bmp)
         }
     }
 }

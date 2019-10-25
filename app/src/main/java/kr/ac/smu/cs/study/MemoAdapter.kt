@@ -2,6 +2,7 @@ package kr.ac.smu.cs.study
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_memo.view.*
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<MemoAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,9 +27,12 @@ class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<Memo
         memoList[position].let{ item ->
             with(holder) {
                 textView.text = item.title
-                //if(item.image!=null) {
-                    imageView.setImageBitmap(item.image)
-                //}
+                if(item.image!=null) {  //main에서 사진 띄우기
+                    //imageView.setImageBitmap(item.image)
+                    val byteArray= Base64.getDecoder().decode(item.image)
+                    val picture= BitmapFactory.decodeByteArray(byteArray,0,byteArray!!.size)
+                    imageView.setImageBitmap(picture)
+                }
             }
         }
         holder.itemView.setOnClickListener { view->   //수정에 정보날림
@@ -40,13 +45,13 @@ class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<Memo
             intent.putExtra("hour",memoList[position].hour)
             intent.putExtra("minute",memoList[position].minute)
             intent.putExtra("id",memoList[position].id)
-            var bmp=memoList[position].image
+            /*var bmp=memoList[position].image
             //bmp를 byteArray로 변환해서 intent 전달
             var stream=ByteArrayOutputStream()
             bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
             var byteArray=stream.toByteArray()
-            intent.putExtra("image",byteArray)
-            //intent.putExtra("image",memoList[position].image)
+            intent.putExtra("image",byteArray)*/
+            intent.putExtra("image",memoList[position].image)
             view.context.startActivity(intent)
         }
 

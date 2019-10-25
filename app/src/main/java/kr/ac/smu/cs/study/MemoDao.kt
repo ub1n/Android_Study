@@ -1,5 +1,6 @@
 package kr.ac.smu.cs.study
 
+import android.graphics.Bitmap
 import androidx.room.*
 
 @Dao
@@ -15,6 +16,8 @@ interface MemoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE) //정보 넣기
     fun insert(memo: Memo)
+
+
 
 
 }

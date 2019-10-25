@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_add.*
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 import java.util.*
 
 class AddActivity : AppCompatActivity() {
@@ -38,12 +40,14 @@ class AddActivity : AppCompatActivity() {
             memo.content=ContentText.text.toString()
             val database: MemoDatabase = MemoDatabase.getInstance(applicationContext) //application context
             val memoDao: MemoDao=database.memoDao
+
             Thread { database.memoDao.insert(memo) }.start()
+
             val intent = Intent(this, MainActivity::class.java) //로그인 액티비티로 돌아가기
             this.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             this.finish()
         }
-        imageView.setOnClickListener{
+        imageView.setOnClickListener{ //카메라부르기
             var intent=Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivityForResult(intent,123)
         }
@@ -53,19 +57,22 @@ class AddActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==123){
-            var bmp= data?.extras?.get("data") as Bitmap
+            /*var bmp= data?.extras?.get("data") as Bitmap
             //imageView.setImageBitmap(bmp)
             memo.image=bmp
-            imageView.setImageBitmap(memo.image)
+            imageView.setImageBitmap(memo.image)*/
 
             //imageView.setImageBitmap(bmp)
-            /*var bmp=data?.extras?.get("data") as Bitmap
+
+            //bitmap-> byteArray->String
+            //이런거 추가하면 삭제했다 다시깔아야댐 이거때문에 삽질 미쳤다
+            var bmp=data?.extras?.get("data") as Bitmap
             var stream= ByteArrayOutputStream()
             bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
             var byteArray=stream.toByteArray()
-            memo.image=byteArray
-
-            imageView.setImageBitmap(bmp)*/
+            var w=Base64.getEncoder().encodeToString(byteArray)
+            memo.image=w
+            imageView.setImageBitmap(bmp)
         }
     }
     @RequiresApi(Build.VERSION_CODES.N)
