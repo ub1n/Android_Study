@@ -1,13 +1,16 @@
 package kr.ac.smu.cs.study
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_memo.view.*
+import java.io.ByteArrayOutputStream
 
 class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<MemoAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,6 +25,9 @@ class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<Memo
         memoList[position].let{ item ->
             with(holder) {
                 textView.text = item.title
+                //if(item.image!=null) {
+                    imageView.setImageBitmap(item.image)
+                //}
             }
         }
         holder.itemView.setOnClickListener { view->   //수정에 정보날림
@@ -34,6 +40,13 @@ class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<Memo
             intent.putExtra("hour",memoList[position].hour)
             intent.putExtra("minute",memoList[position].minute)
             intent.putExtra("id",memoList[position].id)
+            var bmp=memoList[position].image
+            //bmp를 byteArray로 변환해서 intent 전달
+            var stream=ByteArrayOutputStream()
+            bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            var byteArray=stream.toByteArray()
+            intent.putExtra("image",byteArray)
+            //intent.putExtra("image",memoList[position].image)
             view.context.startActivity(intent)
         }
 
@@ -42,6 +55,7 @@ class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<Memo
     }
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) { //BindViewHolder에서 사용할 변수지정
         val textView: TextView = view.item_memo_title  //view.item_memo_title을 textView란 이름으로 BindViewHolder에서 사용
+        val imageView: ImageView =view.imageView2
 
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.CheckBox
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         regbutton.setOnClickListener{ view->   //임시 등록버튼
             var intent= Intent(this,AddActivity::class.java)
             startActivityForResult(intent,2)
@@ -39,6 +41,11 @@ class MainActivity : AppCompatActivity() {
 
         val thread = Thread(r)
         thread.start()
+       /* var checkBox:CheckBox=findViewById(R.id.checkBox)
+        delbutton.setOnClickListener { view->
+            if(checkBox.isChecked)
+                delbutton.text="선택됨"
+        }*/
 
     }
 }

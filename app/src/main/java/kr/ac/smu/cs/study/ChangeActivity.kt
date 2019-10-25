@@ -3,13 +3,17 @@ package kr.ac.smu.cs.study
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_change.*
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class ChangeActivity : AppCompatActivity() {
@@ -25,6 +29,9 @@ class ChangeActivity : AppCompatActivity() {
         val hour=intent.getIntExtra("hour",0)
         val minute=intent.getIntExtra("minute",0)
         val id=intent.getIntExtra("id",0)
+        val byteArray=intent.getByteArrayExtra("image")
+        val picture= BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)
+        memo.image=picture
         memo.title=title
         memo.content=content
         memo.year=year
@@ -33,6 +40,11 @@ class ChangeActivity : AppCompatActivity() {
         memo.hour=hour
         memo.minute=minute
         memo.id=id
+        c_imageView.setImageBitmap(picture)
+        if(byteArray==null){
+            c_addbutton.text="사진없음ㅋ"
+        }
+
         val database: MemoDatabase = MemoDatabase.getInstance(applicationContext)
         val memoDao: MemoDao=database.memoDao
         c_datebutton.text="${memo.year}년 ${memo.month}월 ${memo.day}일"
@@ -49,10 +61,14 @@ class ChangeActivity : AppCompatActivity() {
             this.finish()
         }
         c_delbutton.setOnClickListener { view->    //삭제 -> 메모클래스에 빈부분이 하나라도있으면 안됨(id포함)
-            Thread { database.memoDao.delete(memo) }.start()
+            Thread { database.memoDao.delete(memo.id) }.start()
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             this.finish()
+        }
+        c_imageView.setOnClickListener{
+            var intent=Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent,123)
         }
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -86,5 +102,18 @@ class ChangeActivity : AppCompatActivity() {
         }, year, month, day)
 
         dpd.show()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==123){
+            var bmp= data?.extras?.get("data") as Bitmap
+            c_imageView.setImageBitmap(bmp)
+            memo.image=bmp
+            /*var bmp=data?.extras?.get("data") as Bitmap
+            var stream= ByteArrayOutputStream()
+            bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            var byteArray=stream.toByteArray()
+            memo.image=byteArray*/
+        }
     }
 }

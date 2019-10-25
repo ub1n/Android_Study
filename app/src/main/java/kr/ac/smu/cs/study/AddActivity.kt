@@ -3,12 +3,15 @@ package kr.ac.smu.cs.study
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_add.*
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class AddActivity : AppCompatActivity() {
@@ -40,7 +43,30 @@ class AddActivity : AppCompatActivity() {
             this.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             this.finish()
         }
+        imageView.setOnClickListener{
+            var intent=Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent,123)
+        }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==123){
+            var bmp= data?.extras?.get("data") as Bitmap
+            //imageView.setImageBitmap(bmp)
+            memo.image=bmp
+            imageView.setImageBitmap(memo.image)
+
+            //imageView.setImageBitmap(bmp)
+            /*var bmp=data?.extras?.get("data") as Bitmap
+            var stream= ByteArrayOutputStream()
+            bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            var byteArray=stream.toByteArray()
+            memo.image=byteArray
+
+            imageView.setImageBitmap(bmp)*/
+        }
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun clickTimePicker(view: View) {  //timepicker 눌렀을때 선택창 띄워주고 정보 받음

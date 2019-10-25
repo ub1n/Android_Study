@@ -9,6 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.ArrayList
+import com.amitshekhar.DebugDB
+
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -16,6 +19,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        DebugDB.getAddressLog()
+
+
+
         login_checkBox.setChecked(App.prefs.myCheckbox)
         login_checkId.setChecked(App.prefs.myCheckId)
         login_checkPw.setChecked(App.prefs.myCheckPw)
