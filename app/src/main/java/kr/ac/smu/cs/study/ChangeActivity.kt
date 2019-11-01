@@ -29,11 +29,14 @@ class ChangeActivity : AppCompatActivity() {
         val hour=intent.getIntExtra("hour",0)
         val minute=intent.getIntExtra("minute",0)
         val id=intent.getIntExtra("id",0)
-        val byteString=intent.getStringExtra("image")
-        val byteArray=Base64.getDecoder().decode(byteString)
+        //val byteString=intent.getStringExtra("image")
+        //val byteArray=Base64.getDecoder().decode(byteString)
+        val byteArray=intent.getByteArrayExtra("image")
+        if(byteArray!=null){
         val picture= BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)
         //memo.image=picture
-        memo.image=byteString
+        memo.image=byteArray
+            c_imageView.setImageBitmap(picture)}
         memo.title=title
         memo.content=content
         memo.year=year
@@ -42,10 +45,7 @@ class ChangeActivity : AppCompatActivity() {
         memo.hour=hour
         memo.minute=minute
         memo.id=id
-        c_imageView.setImageBitmap(picture)
-        if(byteArray==null){
-            c_addbutton.text="사진없음ㅋ"
-        }
+
 
         val database: MemoDatabase = MemoDatabase.getInstance(applicationContext)
         val memoDao: MemoDao=database.memoDao
@@ -115,8 +115,8 @@ class ChangeActivity : AppCompatActivity() {
             var stream= ByteArrayOutputStream()
             bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
             var byteArray=stream.toByteArray()
-            var w=Base64.getEncoder().encodeToString(byteArray)
-            memo.image=w
+           // var w=Base64.getEncoder().encodeToString(byteArray)
+            memo.image=byteArray
             c_imageView.setImageBitmap(bmp)
         }
     }

@@ -11,10 +11,16 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.android.synthetic.main.activity_add.*
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class AddActivity : AppCompatActivity() {
     var memo=Memo()
@@ -29,6 +35,7 @@ class AddActivity : AppCompatActivity() {
         val hour=c.get(Calendar.HOUR)
         val min=c.get(Calendar.MINUTE)
         timebutton.text="${hour} : ${min}"
+
         //디폴트로 현재시간 일단 넣어둠
         memo.year=year
         memo.month=month+1
@@ -42,6 +49,7 @@ class AddActivity : AppCompatActivity() {
             val memoDao: MemoDao=database.memoDao
 
             Thread { database.memoDao.insert(memo) }.start()
+            doWorkWithConstraints()
 
             val intent = Intent(this, MainActivity::class.java) //로그인 액티비티로 돌아가기
             this.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -70,8 +78,8 @@ class AddActivity : AppCompatActivity() {
             var stream= ByteArrayOutputStream()
             bmp?.compress(Bitmap.CompressFormat.JPEG,100,stream)
             var byteArray=stream.toByteArray()
-            var w=Base64.getEncoder().encodeToString(byteArray)
-            memo.image=w
+            //var w=Base64.getEncoder().encodeToString(byteArray)
+            memo.image=byteArray
             imageView.setImageBitmap(bmp)
         }
     }
@@ -106,5 +114,49 @@ class AddActivity : AppCompatActivity() {
         }, year, month, day)
 
         dpd.show()
+    }
+    private fun getDelayTime(): Long {
+        val c = Calendar.getInstance()
+
+        val hour=c.get(Calendar.HOUR)
+        val min=c.get(Calendar.MINUTE)
+        val sec=c.get(Calendar.SECOND)
+
+
+        val dataFormat = SimpleDateFormat("HH:mm:ss", Locale.KOREA)
+
+        val todayDate = Date(System.currentTimeMillis())
+
+        val currentTime = dataFormat.format(todayDate)
+
+
+
+        val d1 = dataFormat.parse("${memo.hour}:${memo.minute}:00")
+
+        val d2 = dataFormat.parse("$hour:$min:$sec")
+
+        val diff = d1.time - d2.time
+
+
+
+        return diff*1000
+
+
+
+    }
+    fun doWorkWithConstraints(){
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresCharging(true)
+            .build()
+        val a="a"
+        // 제약 조건과 함께 작업 요청 생성
+        val requestConstraint  = OneTimeWorkRequestBuilder<AlarmWorker>().setInitialDelay(getDelayTime(),
+            TimeUnit.MICROSECONDS)
+            .build()
+
+        val workManager = WorkManager.getInstance()
+
+        workManager?.enqueue(requestConstraint)
     }
 }

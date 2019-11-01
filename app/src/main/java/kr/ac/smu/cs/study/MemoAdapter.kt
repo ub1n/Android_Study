@@ -1,5 +1,6 @@
 package kr.ac.smu.cs.study
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -9,12 +10,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_memo.view.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 
-class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<MemoAdapter.ViewHolder>() {
+class MemoAdapter(private var memoList : MutableList<Memo>, context : Context) : RecyclerView.Adapter<MemoAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_memo, parent, false)
 
@@ -29,7 +31,8 @@ class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<Memo
                 textView.text = item.title
                 if(item.image!=null) {  //main에서 사진 띄우기
                     //imageView.setImageBitmap(item.image)
-                    val byteArray= Base64.getDecoder().decode(item.image)
+                    //val byteArray= Base64.getDecoder().decode(item.image)
+                    val byteArray=item.image
                     val picture= BitmapFactory.decodeByteArray(byteArray,0,byteArray!!.size)
                     imageView.setImageBitmap(picture)
                 }
@@ -58,9 +61,18 @@ class MemoAdapter(private var memoList : List<Memo>) : RecyclerView.Adapter<Memo
 
 
     }
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) { //BindViewHolder에서 사용할 변수지정
         val textView: TextView = view.item_memo_title  //view.item_memo_title을 textView란 이름으로 BindViewHolder에서 사용
         val imageView: ImageView =view.imageView2
 
+        /*fun remove(position:Int){
+            memoList.removeAt(position)
+        }*/
+
+    }
+    fun remove(position:Int){
+        memoList.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

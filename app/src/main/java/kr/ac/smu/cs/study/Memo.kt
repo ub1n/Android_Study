@@ -14,7 +14,7 @@ class Memo() { //저장할 정보, primaryKey가 필요
     var day:Int?=null
     var hour:Int?=null
     var minute:Int?=null
-    var image: String?=null
+    var image: ByteArray?=null
         //@Embedded
 
 

@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface MemoDao {
     @Query("SELECT * FROM memo ") //email 값이 등록한 email과 같은 유저 전부 보이는 쿼리
-    fun getMemo(): List<Memo>
+    fun getMemo(): MutableList<Memo>
 
     @Query("DELETE FROM memo WHERE id = (:id)")
     fun delete(id:Int)
